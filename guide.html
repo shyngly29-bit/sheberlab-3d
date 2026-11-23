@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Симуляторды қалай жасаймыз · ШеберLab 3D</title>
+<meta name="description" content="Мұғалімге нұсқаулық: ChatGPT немесе Gemini көмегімен еңбек сабағына арналған HTML-симуляторды кезең-кезеңімен жасау.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/styles.css?v=2">
+<style>
+/* Стили только для страницы-инструкции */
+.g-lead{font-size:1.12rem;max-width:62ch}
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px}
+.skill{background:#fff;border:1px solid rgba(35,56,47,.12);border-radius:16px;padding:18px}
+.skill b{display:block;color:#23382F;margin-bottom:6px}
+.skill p{margin:0;font-size:.95rem}
+.steps{list-style:none;padding:0;margin:18px 0 0;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding:0 0 22px 58px;border-left:2px solid rgba(181,138,85,.35);margin-left:20px}
+.steps>li:last-child{border-left-color:transparent}
+.steps>li::before{content:counter(s);position:absolute;left:-21px;top:-4px;width:40px;height:40px;border-radius:50%;background:#23382F;color:#F5F1E8;display:grid;place-items:center;font-weight:700}
+.steps h3{margin:0 0 6px;font-size:1.08rem;color:#23382F}
+.steps p{margin:0 0 6px}
+.prompt{position:relative;background:#202722;color:#F5F1E8;border-radius:16px;padding:20px 18px 18px;margin:14px 0;font:14px/1.6 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-word}
+.prompt .copy{position:absolute;top:10px;right:10px;border:0;border-radius:10px;padding:7px 12px;background:#B58A55;color:#fff;font:600 13px Inter,sans-serif;cursor:pointer}
+.prompt .copy:focus-visible{outline:3px solid #F5F1E8;outline-offset:2px}
+.prompt mark{background:rgba(181,138,85,.35);color:#fff;border-radius:4px;padding:0 3px}
+.ai-compare{width:100%;border-collapse:collapse;margin-top:14px;background:#fff;border-radius:14px;overflow:hidden}
+.ai-compare th,.ai-compare td{padding:12px 14px;text-align:left;border-bottom:1px solid rgba(35,56,47,.1);vertical-align:top;font-size:.95rem}
+.ai-compare th{background:#23382F;color:#F5F1E8;font-weight:600}
+.check{list-style:none;padding:0}
+.check li{padding-left:30px;position:relative;margin:8px 0}
+.check li::before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:6px;background:#B58A55;color:#fff;font-size:13px;display:grid;place-items:center}
+@media (max-width:560px){.ai-compare th,.ai-compare td{padding:10px 8px;font-size:.88rem}.steps>li{padding-left:44px}}
+</style>
+</head>
+<body>
+<header class="top solid">
+  <a class="brand" href="./">Шебер<span>Lab</span> 3D</a>
+  <nav aria-label="Негізгі мәзір">
+    <a href="./#modules" class="hide-xs">Модульдер</a>
+    <a href="guide.html" aria-current="page"><span class="l">Қалай жасалады</span><span class="s">Нұсқаулық</span></a>
+    <a href="idea.html"><span class="l">Педагогикалық идея</span><span class="s">Идея</span></a>
+  </nav>
+</header>
+<main class="doc">
+  <span class="kicker">Мұғалімге нұсқаулық</span>
+  <h1>HTML-симуляторды ЖИ көмегімен қалай жасаймыз</h1>
+  <p class="g-lead">Бағдарламалау тілін білу міндетті емес. Мұғалім сабақтың мазмұнын, ал ЖИ (ChatGPT немесе Gemini) кодты жазады. Мұғалімнің басты міндеті — сценарийді нақты сипаттау және нәтижені тексеру.</p>
+
+  <section>
+    <h2>Қандай дағдылар керек</h2>
+    <div class="skills">
+      <div class="skill"><b>Пәндік</b><p>Технологиялық картаны білу: материал, өлшем, құрал, операциялар реті, қауіпсіздік.</p></div>
+      <div class="skill"><b>Педагогикалық</b><p>Тапсырманы кезеңге бөлу, жиі кездесетін қателерді болжау, дескриптор мен рубрика құру.</p></div>
+      <div class="skill"><b>Промпт жазу</b><p>ЖИ-ге не керегін нақты, тізіммен, мысалмен жеткізу. Бір хабарламада бір өзгеріс сұрау.</p></div>
+      <div class="skill"><b>Сыни тексеру</b><p>ЖИ қателеседі. Әр батырманы, өлшемді, ұпайды өзі басып тексеру және мәтіннің қазақшасын түзету.</p></div>
+      <div class="skill"><b>Цифрлық</b><p>Файлды .html етіп сақтау, браузерде ашу, сілтеме мен QR-код арқылы оқушыларға беру.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Жасау кезеңдері</h2>
+    <ol class="steps">
+      <li><h3>Тақырыпты таңдау</h3><p>Нақты нәтижесі бар, 4–6 операциядан тұратын тақырып алыңыз. Мысалы: телефон тұғыры, кесу тақтайшасы, жастық тігу, ою салу.</p></li>
+      <li><h3>Сценарийді қағазға жазу</h3><p>Әр кезең үшін үш нәрсені жазыңыз: оқушы не істейді, қандай әрекет дұрыс, қате болса не болады. Сценарий неғұрлым нақты болса, ЖИ солғұрлым дұрыс жасайды.</p></li>
+      <li><h3>Бағалау рубрикасын құру</h3><p>3–5 критерий, әрқайсысы 0–2 ұпай. Ұпай тек нақты әрекет үшін беріледі, бетті айналдырғаны немесе қарағаны үшін емес.</p></li>
+      <li><h3>Промпт жазу</h3><p>Төмендегі үлгіні көшіріп, жақшадағы орындарды өз тақырыбыңызбен толтырыңыз.</p></li>
+      <li><h3>ЖИ-ден код алу</h3><p>ChatGPT-да немесе Gemini-де Canvas режимін қосып, промптты жіберіңіз. Нәтиже бірден «Алдын ала қарау» терезесінде ашылады.</p></li>
+      <li><h3>Тексеру және түзету</h3><p>Симуляторды оқушы ретінде өзіңіз өтіңіз: дұрыс жолмен де, әдейі қатемен де. Табылған әр қатені бөлек хабарламамен түзеттіріңіз.</p></li>
+      <li><h3>Сақтау және тарату</h3><p>Кодты <code>index.html</code> файлы етіп сақтаңыз. Сілтеме алу үшін Netlify Drop немесе GitHub Pages сайтына жүктеп, сілтемеден QR-код жасаңыз.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Промпт үлгісі</h2>
+    <p>ChatGPT-ға да, Gemini-ге де жарайды. Жақшадағы мәтінді ауыстырыңыз.</p>
+    <div class="prompt" id="p-main"><button class="copy" type="button" data-copy="p-main">Көшіру</button>Сен тәжірибелі веб-әзірлеушісің. Көркем еңбек сабағына арналған интерактивті симулятор жаса.
+
+Тақырып: <mark>[ағаштан телефон тұғырын жасау]</mark>, <mark>[6]</mark>-сынып.
+Тіл: барлық мәтін қазақ тілінде.
+Формат: бір ғана index.html файлы (HTML, CSS, JavaScript бірге), интернетсіз де ашылсын, телефонда да ыңғайлы болсын.
+
+Кезеңдер:
+1. <mark>[Материал таңдау: фанера — дұрыс, МДФ — қате, себебін түсіндір]</mark>
+2. <mark>[Өлшеу: ұзындығы 130–160 мм, ені 70–90 мм]</mark>
+3. <mark>[Белгілеу: сызықты 60 мм-ге қою, ауытқу ±2 мм]</mark>
+4. <mark>[Өңдеу реті: қысқыш → ара → егеу → зімпара]</mark>
+5. <mark>[Құрастыру: желім → тірек → бұрыш 60–70°]</mark>
+6. Нәтиже және бағалау.
+
+Әр кезеңде: оқушы әрекет жасайды, «Тексеру» батырмасы бар, қате болса не дұрыс емес екенін және неге екенін көрсет, дұрыс болса ғана келесі кезең ашылады. Артқа қайтуға болады.
+
+Бағалау: <mark>[5]</mark> критерий, әрқайсысы 0–2 ұпай. Ұпай тек нақты әрекет үшін, қате саны ескеріледі. Соңында ұпай, қателер тізімі және ұсыныстар шықсын. Нәтиже браузерде (localStorage) сақталсын, «Қайта бастау» батырмасы болсын.
+
+Дизайн: таза, ұстамды, түстер #F5F1E8, #23382F, #B58A55. Үлкен батырмалар, анық қаріп.
+
+Алдымен кезеңдер жоспарын қысқаша жаз, содан кейін толық кодты бер.</div>
+
+    <h3>Түзетуге арналған промпттар</h3>
+    <div class="prompt" id="p-fix"><button class="copy" type="button" data-copy="p-fix">Көшіру</button>• 3-кезеңде «Тексеру» батырмасы жұмыс істемейді. Тек осы кезеңді түзет, қалғанын өзгертпе.
+• Телефонда (ені 375 px) мәтін экраннан шығып тұр. Бейімделгіш етіп түзет.
+• Ұпай кезеңді жай ашқанда да беріліп жатыр. Ұпайды тек дұрыс әрекеттен кейін бер.
+• Мына сөздерді дұрыс қазақшаға ауыстыр: <mark>[...]</mark>
+• Өңдеу кезеңіне 3D модель қос (Three.js): кескеннен кейін дайындама екі бөлікке бөлінсін.
+• Толық жаңартылған кодты бір файлмен бер.</div>
+  </section>
+
+  <section>
+    <h2>ChatGPT немесе Gemini</h2>
+    <table class="ai-compare">
+      <thead><tr><th></th><th>ChatGPT</th><th>Gemini</th></tr></thead>
+      <tbody>
+        <tr><td>Алдын ала қарау</td><td>Canvas режимі, «Preview»</td><td>Canvas режимі, «Preview»</td></tr>
+        <tr><td>Ыңғайлы жағы</td><td>Ұзын кодты түзетуде тұрақты</td><td>Google Drive-пен байланыс, қазақша мәтінді жақсы түсінеді</td></tr>
+        <tr><td>Кеңес</td><td colspan="2">Бір ЖИ-де бастаған жобаны сол чатта жалғастырыңыз. Әр сәтті нұсқаны бөлек файл етіп сақтап отырыңыз.</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Мүмкіндіктер мен атаулар ЖИ нұсқасына және тарифке қарай өзгеруі мүмкін.</p>
+  </section>
+
+  <section>
+    <h2>Сабаққа дейінгі тексеру парағы</h2>
+    <ul class="check">
+      <li>Барлық кезең дұрыс жолмен соңына дейін өтеді.</li>
+      <li>Әдейі жасалған қате ұпайды азайтады, түсіндірме шығады.</li>
+      <li>Өлшемдер мен операциялар реті технологиялық картаға сәйкес.</li>
+      <li>Мәтін қазақ тілінде, қатесіз.</li>
+      <li>Телефонда, планшетте және интерактивті тақтада ашылады.</li>
+      <li>Оқушының аты-жөні мен жеке деректері жиналмайды.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Педагогикалық оқуларда көрсету (2 минут)</h2>
+    <ol class="timeline">
+      <li><time>0:00–0:30</time><span>Қағаздағы сценарий мен рубриканы көрсету: мазмұнды мұғалім жасайды.</span></li>
+      <li><time>0:30–1:10</time><span>Промптты ЖИ-ге жіберіп, Canvas-та дайын симулятордың ашылғанын көрсету.</span></li>
+      <li><time>1:10–1:40</time><span>Бір түзету промптын жіберу: ЖИ қатесін мұғалім тексеріп, түзеттіреді.</span></li>
+      <li><time>1:40–2:00</time><span>QR-код арқылы әріптестерге сілтемені беру.</span></li>
+    </ol>
+  </section>
+
+  <div class="cta-row" style="margin-top:44px">
+    <a class="btn" href="./#sim">Дайын симуляторды ашу</a>
+    <a class="btn ghost" href="idea.html">Педагогикалық идея</a>
+  </div>
+</main>
+<footer class="foot"><span>ШеберLab 3D · демо нұсқа</span></footer>
+<script>
+// Копирование промпта без кнопки «Көшіру»
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{
+  const box=document.getElementById(b.dataset.copy);
+  const t=[...box.childNodes].filter(n=>n!==b).map(n=>n.textContent).join('').trim();
+  try{await navigator.clipboard.writeText(t);b.textContent='Көшірілді ✓'}
+  catch(e){const r=document.createRange();r.selectNodeContents(box);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Ctrl+C басыңыз'}
+  setTimeout(()=>b.textContent='Көшіру',2000);
+}));
+</script>
+</body>
+</html>
