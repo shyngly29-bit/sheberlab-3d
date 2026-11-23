@@ -1,0 +1,14 @@
+{
+  "name": "sheberlab-3d",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ШеберLab 3D — демо HTML-симуляторов для художественного труда",
+  "scripts": {
+    "dev": "vite --port 5173",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
